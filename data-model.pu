@@ -1,0 +1,73 @@
+@startuml
+left to right direction
+hIDe circle
+skinparam linetype ortho
+
+rectangle 書籍 {
+  entity 書籍マスタ {
+    ID
+    --
+    書籍名
+    著者
+    発行日
+  }
+
+  entity 商品 {
+    ID
+    --
+    利用者ID<<FK>>
+    書籍マスタID<<FK>>
+    商品説明
+    返却日
+    レンタル期間
+  }
+  商品 }|.. 書籍マスタ
+
+  entity 評価 {
+    ID
+    --
+    商品ID<<FK>>
+    レンタルID<<FK>>
+    評価
+    コメント
+  }
+  評価 }o.. 商品
+  評価 |o.. レンタル
+}
+
+rectangle 利用者 {
+  entity 利用者 {
+    ID
+    --
+    メールアドレス
+    電話番号
+  }
+  商品 }o.. 利用者
+
+  entity 利用者詳細 {
+    利用者ID<<FK>>
+    --
+    姓
+    名
+    ニックネーム
+    生年月日
+    自己紹介
+    住所
+  }
+  利用者..利用者詳細
+}
+
+rectangle レンタル {
+  entity レンタル {
+    ID
+    --
+    商品ID<<FK>>
+    利用者ID<<FK>>
+    レンタル日
+    返却状態
+  }
+  レンタル }o.. 商品
+  レンタル }o.. 利用者
+
+}
+@enduml

@@ -1,0 +1,16 @@
+id,user_account_id,product_id,rental_date,rental_states
+rental_01,user_account_1,product_1,2020-12-31,HOGEHOGE
+rental_02,user_account_2,product_1,2020-12-31,HOGEHOGE
+rental_03,user_account_3,product_1,2020-12-31,HOGEHOGE
+rental_04,user_account_1,product_2,2020-12-31,HOGEHOGE
+rental_05,user_account_1,product_3,2020-12-31,HOGEHOGE
+rental_06,user_account_2,product_2,2020-12-31,HOGEHOGE
+rental_07,user_account_2,product_3,2020-12-31,HOGEHOGE
+rental_08,user_account_3,product_2,2020-12-31,HOGEHOGE
+rental_09,user_account_3,product_3,2020-12-31,HOGEHOGE
+rental_10,user_account_1,product_4,2020-12-31,HOGEHOGE
+rental_11,user_account_2,product_5,2020-12-31,HOGEHOGE
+rental_12,user_account_3,product_6,2020-12-31,HOGEHOGE
+rental_13,user_account_1,product_7,2020-12-31,HOGEHOGE
+rental_14,user_account_2,product_8,2020-12-31,HOGEHOGE
+rental_15,user_account_3,product_9,2020-12-31,HOGEHOGE

@@ -1,0 +1,109 @@
+<project xmlns:if="ant:if" xmlns:unless="ant:unless" name="share-book" basedir="." default="install">
+
+  <condition property="mvn.cmd" value="${basedir}\mvnw.cmd" else="${basedir}\mvnw">
+    <os family="windows" />
+  </condition>
+
+  <exec executable="docker-compose" resultproperty="docker.ret" failifexecutionfails="false">
+    <arg line="version"/>
+  </exec>
+  
+  <condition property="docker.installed">
+    <equals arg1="${docker.ret}" arg2="0"/>
+  </condition>
+
+
+  <target name="install">
+
+    <antcall target="init-container"/>
+
+    <property name="reverse.skip" value="true" />
+    <antcall target="migrate" />
+
+    
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg line="install -Dmaven.test.skip=true -Dspring-boot.repackage.skip=true"/>
+    </exec>
+  </target>
+  
+  
+  <target name="init-container" if="${docker.installed}">
+
+    <!-- ビルドしてリソース生成 -->
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg line="process-resources -N"/>
+    </exec>
+
+    <!-- コンテナを作成し、バックグラウンドで実行し続ける -->
+    <exec executable="docker-compose" failonerror="true">
+      <arg line="up -d"/>
+    </exec>
+
+  </target>
+  
+  <target name="set-version">
+
+    <property name="version" value="1.0-SNAPSHOT"/>
+
+    <exec executable="${mvn.cmd}">
+      <arg line="versions:set -DnewVersion=${version} -DgenerateBackupPoms=false" />
+    </exec>
+
+    <exec executable="${mvn.cmd}">
+      <arg line="-f src/archetype" />
+      <arg line="versions:set -DnewVersion=${version} -DgenerateBackupPoms=false" />
+    </exec>
+
+    <replaceregexp file="README.md"
+                   match="-DarchetypeVersion=.* "
+                   replace="-DarchetypeVersion=${version} " />
+
+    <replaceregexp file="README_ja.md"
+                   match="-DarchetypeVersion=.* "
+                   replace="-DarchetypeVersion=${version} " />
+
+    <replaceregexp file="src/archetype/build.xml"
+                   match="-DarchetypeVersion=.*&quot;"
+                   replace="-DarchetypeVersion=${version}&quot;" />
+
+    <replaceregexp file="share-book-migration/pom.xml"
+                   match="&lt;csvloader.version&gt;.*&lt;/csvloader.version&gt;"
+                   replace="&lt;csvloader.version&gt;${version}&lt;/csvloader.version&gt;" />
+
+  </target>
+
+   <target name="translate-readme">
+    <exec executable="${mvn.cmd}" dir="${basedir}" failonerror="true">
+      <arg line="-N sit-bt:translate -Dbt.mode=ja2en" />
+      <arg value="-Dbt.target=README_ja.md:README.md" />
+    </exec>
+
+    <replace file="README.md" token="[English](README.md)" value="[日本語](README_ja.md)"/>
+  </target>
+
+
+<!-- migrate cmd -->
+  <target name="migrate">
+    <!-- executable:実行ファイル(./mvnw) -->
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg line="-f share-book-migration -P migrate"/>
+    </exec>
+
+    <antcall target="reverse" />
+
+  </target>
+
+  <target name="reverse">
+    <exec unless:true="reverse.skip" executable="${mvn.cmd}" failonerror="true">
+      <arg line="-f share-book-entity -P reverse" />
+    </exec>
+
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg line="-f share-book-entity install" />
+    </exec>
+
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg line="clean install -Dmaven.test.skip=true" />
+    </exec>
+  </target>
+</project>

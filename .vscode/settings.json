@@ -1,0 +1,7 @@
+{
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "[typescriptreact]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+}

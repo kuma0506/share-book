@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+
+  dbms:
+    image: postgres:12
+    environment:
+      TZ: ${OS_TIMEZONE}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+    ## healthcheck：intervalで指定した時間毎にtestを実施する
+    healthcheck:
+      ## 接続状態を検査
+      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
+      interval: 10s
+      ## retries:指定した回数分、失敗したらunhealthy 扱い。
+      timeout: 10s
+      retries: 5
+
+

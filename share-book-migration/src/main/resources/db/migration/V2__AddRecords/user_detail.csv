@@ -1,0 +1,4 @@
+user_account_id,first_name,last_name,nick_name,birth_day,profile,address
+user_account_1,sharebook,太郎1,,2020-01-01,hogehoge1,住所1
+user_account_2,sharebook,太郎2,,2020-01-01,hogehoge2,住所2
+user_account_3,sharebook,太郎3,,2020-01-01,hogehoge3,住所3

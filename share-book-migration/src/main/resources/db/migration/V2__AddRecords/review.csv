@@ -1,0 +1,16 @@
+id,product_id,rental_id,evaluation,comment
+review_01,product_1,rental_01,5,コメント01
+review_02,product_1,rental_02,4,コメント02
+review_03,product_1,rental_03,5,コメント03
+review_04,product_2,rental_04,3,コメント04
+review_05,product_3,rental_05,5,コメント05
+review_06,product_2,rental_06,3,コメント06
+review_07,product_3,rental_07,4,コメント07
+review_08,product_2,rental_08,5,コメント08
+review_09,product_3,rental_09,2,コメント09
+review_10,product_4,rental_10,1,コメント10
+review_11,product_5,rental_11,3,コメント11
+review_12,product_6,rental_12,4,コメント12
+review_13,product_7,rental_13,5,コメント13
+review_14,product_8,rental_14,1,コメント14
+review_15,product_9,rental_15,5,コメント15

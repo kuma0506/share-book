@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-ShareBookApp<share-book-back>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "share.book.ShareBookApp",
+      "projectName": "share-book-back",
+      "args": ""
+    }
+  ]
+}

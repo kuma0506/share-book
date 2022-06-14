@@ -1,0 +1,6 @@
+book
+user_account
+user_detail
+product
+rental
+review

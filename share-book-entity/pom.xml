@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>share-book-entity</artifactId>
+
+  <properties>
+    <hibernate-tools.destdir>${project.build.directory}/generated-sources/hibernate-tools</hibernate-tools.destdir>
+  </properties>
+
+  <dependencies>
+  
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>2.5.9</version>
+    </dependency>
+    
+  </dependencies>
+
+  <parent>
+    <groupId>share-book</groupId>
+    <artifactId>share-book</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+
+  <!-- Build Settings -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-tools-maven-plugin</artifactId>
+        <version>5.5.2.Final</version>
+        <configuration>
+          <ejb3>true</ejb3>
+          <jdk5>true</jdk5>
+          <propertyFile>${project.build.directory}/hibernate.reveng.properties</propertyFile>
+          <revengStrategy>style.resortwork.reverse.jpa.CustomReverseEngineeringStrategy</revengStrategy>
+          <templatePath>${basedir}/src/tools/resources</templatePath>
+          <revengFile>${basedir}/hibernate.reveng.xml</revengFile>
+          <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>share-book</groupId>
+            <artifactId>share-book-entity</artifactId>
+            <version>0.8-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>reverse</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-tools</artifactId>
+          <version>5.3.20.Final</version>
+        </dependency>
+        <dependency>
+          <groupId>${db.jdbc.groupId}</groupId>
+          <artifactId>${db.jdbc.artifactId}</artifactId>
+          <version>${db.jdbc.version}</version>
+        </dependency>
+        
+      </dependencies>
+
+      <build>
+        <defaultGoal>clean compile antrun:run</defaultGoal>
+
+        <resources>
+          <resource>
+            <directory>src/tools/resources</directory>
+            <filtering>true</filtering>
+            <targetPath>${project.build.directory}</targetPath>
+          </resource>
+        </resources>
+
+        <plugins>
+
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <configuration>
+              <target>
+                <property name="maven.compile.classpath" refid="maven.compile.classpath" />
+                <ant antfile="${project.basedir}/build.xml" />
+              </target>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+              <execution>
+                <id>add-tools-source</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/tools/java</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

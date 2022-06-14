@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <!--The Basics-->
+  <groupId>share-book</groupId>
+  <artifactId>share-book</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${db.jdbc.groupId}</groupId>
+        <artifactId>${db.jdbc.artifactId}</artifactId>
+        <version>${db.jdbc.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <ant.target>install</ant.target>
+    <ant.file>build.xml</ant.file>
+  </properties>
+  
+  <!--Build Settings-->
+    
+  <build>
+    <defaultGoal>antrun:run</defaultGoal>
+  
+   <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>.env</include>
+        </includes>
+        <targetPath>${project.basedir}</targetPath>
+      </resource>
+    </resources>
+  
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <inherited>false</inherited>
+        <configuration>
+        <target>
+          <ant antfile="${ant.file}" target="${ant.target}"/>
+        </target>
+        </configuration>
+      </plugin>
+  
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+          <phase>process-resources</phase>
+          <goals>
+          <goal>resources</goal>
+          </goals>
+          </execution>
+        </executions>
+      </plugin>
+  
+      <plugin>
+        <groupId>io.sitoolkit.bt</groupId>
+        <artifactId>sit-bt-maven-plugin</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </plugin>
+    </plugins>
+  
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>3.0.0</version>
+          <inherited>false</inherited>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  
+  <profiles>
+    <profile>
+      <id>local-db</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <db.admin.port>80</db.admin.port>
+        <db.jdbc.groupId>org.postgresql</db.jdbc.groupId>
+        <db.jdbc.artifactId>postgresql</db.jdbc.artifactId>
+        <db.jdbc.version>42.2.8</db.jdbc.version>
+        <db.jdbc.driver>org.postgresql.Driver</db.jdbc.driver>
+        <db.name>postgres</db.name>
+        <db.host>localhost</db.host>
+        <db.port>5500</db.port>
+        <db.jdbc.url>jdbc:postgresql://${db.host}:${db.port}/${db.name}?currentSchema=${db.schema}</db.jdbc.url>
+        <db.username>postgres</db.username>
+        <db.password>postgres</db.password>
+        <db.schema>${project.parent.artifactId}</db.schema>
+      </properties>
+    </profile>
+  </profiles>
+  
+  <modules>
+    <module>share-book-entity</module>
+    <module>share-book-migration</module>
+    <module>share-book-back</module>
+  </modules>
+</project>

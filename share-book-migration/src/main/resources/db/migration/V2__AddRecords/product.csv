@@ -1,0 +1,10 @@
+id,user_account_id,book_id,description,return_date,rental_period
+product_1,user_account_1,book_id_5,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,1
+product_2,user_account_2,book_id_2,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,2
+product_3,user_account_1,book_id_3,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,3
+product_4,user_account_2,book_id_4,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,4
+product_5,user_account_3,book_id_1,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,5
+product_6,user_account_3,book_id_1,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,6
+product_7,user_account_3,book_id_2,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,7
+product_8,user_account_1,book_id_3,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,8
+product_9,user_account_2,book_id_4,この本は私の思い出の作品です。是非読んでみてください。,2020-12-31,9
