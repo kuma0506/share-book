@@ -20,17 +20,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // CORS設定を行うBean定義
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        var configuration = new CorsConfiguration();
-        // Access-Control-Allow-Origin
+        CorsConfiguration configuration = new CorsConfiguration();
+        // 全てのオリジンを許可
         configuration.setAllowedOrigins(List.of("*"));
-        // Access-Control-Allow-Methods
+        // 全てのメソッドを許可（GET, POST, PUT, DELETE）
         configuration.setAllowedMethods(List.of("*"));
-        // Access-Control-Allow-Headers
+        // 全てのリクエストヘッダを許可
         configuration.setAllowedHeaders(List.of("*"));
-        // Access-Control-Allow-Credentials
+        // 認証不要
         configuration.setAllowCredentials(false);
 
-        var source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
