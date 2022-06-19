@@ -56,10 +56,9 @@ export const Top: React.VFC = () => {
   }
 
   function updatePropaty(word: string) {
-      setWord(word);
-      setLocalStorage(LOCAL_STORAGE_WORD_KEY, word);
+    setWord(word);
+    setLocalStorage(LOCAL_STORAGE_WORD_KEY, word);
   }
-
   return (
     <>
       <Heading as="h1" size="xl" mt="3%" mb="8%">
@@ -117,7 +116,11 @@ export const Top: React.VFC = () => {
               return <Box key={key} boxSize="md" overflow="hidden"></Box>;
             })}
         </Grid>
-        <Sideber search={() => search()} updatePropaty={(e: any) => updatePropaty(e)} word={word}/>
+        <Sideber
+          search={() => search()}
+          updatePropaty={(e: any) => updatePropaty(e)}
+          word={word}
+        />
       </Box>
     </>
   );

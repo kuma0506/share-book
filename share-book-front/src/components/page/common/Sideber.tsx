@@ -1,11 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  Flex,
-  Stack,
-  Input,
-  Button,
-} from "@chakra-ui/react";
+import { Box, Flex, Stack, Input, Button, Select } from "@chakra-ui/react";
 import { SearchIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import { useEffect } from "react";
 import {
@@ -25,18 +18,16 @@ const LOCAL_STORAGE_WORD_KEY = "word";
 export type Props = {
   search: any;
   updatePropaty: any;
-  word: string
+  word: string;
 };
 
 export const Sideber: React.VFC<Props> = (props) => {
-
-
   useEffect(() => {
-    props.updatePropaty(getLocalStorage(LOCAL_STORAGE_WORD_KEY) ?? '');  
+    props.updatePropaty(getLocalStorage(LOCAL_STORAGE_WORD_KEY) ?? "");
   }, []);
 
   function clearFunc() {
-    props.updatePropaty('');
+    props.updatePropaty("");
     deleteLocalStorage(LOCAL_STORAGE_WORD_KEY);
   }
 
@@ -62,16 +53,13 @@ export const Sideber: React.VFC<Props> = (props) => {
             <span>
               <CheckCircleIcon /> 評価
             </span>
-            {checkBoxItems.map((item, key) => (
-              <div key={key}>
-                <Checkbox
-                  colorScheme="green"
-                  value={item.value}
-                >
+            <Select placeholder="評価選択">
+              {checkBoxItems.map((item, key) => (
+                <option key={key} value={item.value}>
                   {item.displayName}
-                </Checkbox>
-              </div>
-            ))}
+                </option>
+              ))}
+            </Select>
             <Button onClick={() => clearFunc()}>clear</Button>
           </Stack>
         </Box>
