@@ -1,6 +1,9 @@
 package share.book.domain.product;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -32,9 +35,10 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public List<ProductDto> search(@RequestParam("word") String word) {
-        return mapper.map(productService.findByWord(word), new TypeToken<List<ProductDto>>() {
+    public List<ProductDto> search(@RequestParam("word") String word, @RequestParam("rating") int rating) {
+        List<ProductDto> products = mapper.map(productService.findByWord(word), new TypeToken<List<ProductDto>>() {
         }.getType());
+        return products.stream().filter(product -> product.getAverageRating().compareTo(new BigDecimal(rating)) != -1).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

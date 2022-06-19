@@ -1,10 +1,11 @@
 package share.book.domain.dto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,12 +28,19 @@ public class ProductDto {
     private List<Review> reviews = new ArrayList<>();
 
     @JsonGetter
-    public int getTotalReting() {
-        return getReviews().stream().mapToInt(o -> o.getEvaluation()).sum();
+    public BigDecimal getAverageRating() {
+        //総合評価
+        final BigDecimal averageRating = BigDecimal
+                .valueOf(getReviews().stream().mapToInt(o -> o.getEvaluation()).sum());
+        //評価数
+        final BigDecimal cnt = BigDecimal.valueOf(getReviews().size());
+
+        //総合評価 / 評価数 =　平均評価
+        return averageRating.divide(cnt, 2, RoundingMode.HALF_UP );
     }
 
     @JsonGetter
-    public int getCount() {
+    public int getNumberofReviews() {
         return getReviews().size();
     }
 
