@@ -9,6 +9,7 @@ export const Detail: React.VFC = () => {
   const params = useParams();
   init();
   const [product, setProduct] = useState(new Product());
+
   useEffect(() => {
     axios.get(`api/products/${params.id}`).then((res) => {
       setProduct(res.data);

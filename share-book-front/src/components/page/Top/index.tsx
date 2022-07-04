@@ -11,38 +11,46 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { init } from "../../../infras/ApiCliant";
-import { getLocalStorage, setLocalStorage } from "../../../infras/localStorage";
+import {
+  getLocalStorage,
+  LOCAL_STORAGE_RATING_KEY,
+  LOCAL_STORAGE_WORD_KEY,
+} from "../../../infras/localStorage";
 import { Product } from "../../../types/Product";
 import Rating from "../common/Rating";
 import { Sideber } from "../common/Sideber";
-
-const LOCAL_STORAGE_WORD_KEY = "word";
 
 export const Top: React.VFC = () => {
   init();
 
   const [products, setProducts] = useState([]);
   const [word, setWord] = useState("");
+  const [rating, setRating] = useState("");
   const didMountRef = useRef(false);
 
+  // 空枠の数を取得
   let emptyBoxes = 9 - products.length;
 
+  function initPropertity() {
+    setWord(() => getLocalStorage(LOCAL_STORAGE_WORD_KEY) ?? "");
+    setRating(() => getLocalStorage(LOCAL_STORAGE_RATING_KEY) ?? "");
+  }
+
   useEffect(() => {
-    //mount時はスキップ
+    //Reactの開発環境では2回レンダリングされるため、初回をスキップする。
     if (!didMountRef.current) {
       didMountRef.current = true;
     } else {
       search();
     }
-  }, [word]);
+  }, [word, rating]);
 
   function search() {
     axios
       .get("api/products/search", {
         params: {
-          //TODO useStateのwordで検索するように修正
-          word: getLocalStorage(LOCAL_STORAGE_WORD_KEY) ?? "",
-          rating: 0,
+          word: word,
+          ratingId: rating,
         },
       })
       .then((res) => {
@@ -53,12 +61,9 @@ export const Top: React.VFC = () => {
   function handleUpdate(products: any) {
     setProducts(products);
     emptyBoxes = 9 - products.length;
+    initPropertity();
   }
 
-  function updatePropaty(word: string) {
-    setWord(word);
-    setLocalStorage(LOCAL_STORAGE_WORD_KEY, word);
-  }
   return (
     <>
       <Heading as="h1" size="xl" mt="3%" mb="8%">
@@ -118,8 +123,10 @@ export const Top: React.VFC = () => {
         </Grid>
         <Sideber
           search={() => search()}
-          updatePropaty={(e: any) => updatePropaty(e)}
           word={word}
+          setWord={setWord}
+          rating={rating}
+          setRating={setRating}
         />
       </Box>
     </>

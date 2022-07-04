@@ -1,9 +1,10 @@
 import { Box, Flex, Stack, Input, Button, Select } from "@chakra-ui/react";
 import { SearchIcon, CheckCircleIcon } from "@chakra-ui/icons";
-import { useEffect } from "react";
 import {
   deleteLocalStorage,
-  getLocalStorage,
+  LOCAL_STORAGE_WORD_KEY,
+  LOCAL_STORAGE_RATING_KEY,
+  setLocalStorage,
 } from "../../../infras/localStorage";
 
 // TODO: APIで管理
@@ -13,26 +14,31 @@ let checkBoxItems = [
   { id: "rating-3", displayName: "評価3以上", value: 3 },
 ];
 
-const LOCAL_STORAGE_WORD_KEY = "word";
-
 export type Props = {
   search: any;
-  updatePropaty: any;
   word: string;
+  setWord: any;
+  rating: string;
+  setRating: any;
 };
 
 export const Sideber: React.VFC<Props> = (props) => {
-  useEffect(() => {
-    props.updatePropaty(getLocalStorage(LOCAL_STORAGE_WORD_KEY) ?? "");
-  }, []);
-
   function clearFunc() {
-    props.updatePropaty("");
-    deleteLocalStorage(LOCAL_STORAGE_WORD_KEY);
+    props.setWord("");
+    props.setRating("");
+    deleteLocalStorage();
   }
 
-  const handleChange = (e: any) => {
-    props.updatePropaty(e.target.value);
+  const changeWord = (e: any) => {
+    const inputWord = e.target.value;
+    props.setWord(inputWord);
+    setLocalStorage(LOCAL_STORAGE_WORD_KEY, inputWord);
+  };
+
+  const changeRating = (e: any) => {
+    const selectRating = e.target.value;
+    props.setRating(selectRating);
+    setLocalStorage(LOCAL_STORAGE_RATING_KEY, selectRating);
   };
 
   return (
@@ -47,15 +53,19 @@ export const Sideber: React.VFC<Props> = (props) => {
               placeholder="Search"
               bg={"white"}
               mt={5}
-              onChange={handleChange}
+              onChange={changeWord}
               value={props.word ?? ""}
             />
             <span>
               <CheckCircleIcon /> 評価
             </span>
-            <Select placeholder="評価選択">
+            <Select
+              placeholder="評価選択"
+              onChange={changeRating}
+              value={props.rating}
+            >
               {checkBoxItems.map((item, key) => (
-                <option key={key} value={item.value}>
+                <option key={key} value={item.id}>
                   {item.displayName}
                 </option>
               ))}
